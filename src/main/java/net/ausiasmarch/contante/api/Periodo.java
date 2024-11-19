@@ -73,4 +73,11 @@ public class Periodo {
         return new ResponseEntity<Long>(oPeriodoService.deleteAll(), HttpStatus.OK);
     }
 
+
+    @DeleteMapping("/borrarPares")
+    public ResponseEntity<Long> borrarPares() {
+        
+        return new ResponseEntity<Long>(oPeriodoService.borrarPares(), HttpStatus.OK);
+    }
+
 }

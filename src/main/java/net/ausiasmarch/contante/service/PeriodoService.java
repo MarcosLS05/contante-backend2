@@ -1,6 +1,8 @@
 package net.ausiasmarch.contante.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import net.ausiasmarch.contante.api.Periodo;
 import net.ausiasmarch.contante.entity.PeriodoEntity;
 import net.ausiasmarch.contante.exception.ResourceNotFoundException;
 import net.ausiasmarch.contante.repository.PeriodoRepository;
@@ -125,4 +128,19 @@ public class PeriodoService implements ServiceInterface<PeriodoEntity> {
         return this.count();
     }
     
+    
+
+    public Long borrarPares() {
+    
+        List<PeriodoEntity> arrPeriodo = oPeriodoRepository.findAll();
+    
+        for (int i = 0; i < arrPeriodo.size(); i++) {
+            if (arrPeriodo.get(i).getId() % 2 == 0) {
+                oPeriodoRepository.delete(arrPeriodo.get(i));
+            }
+        }
+
+        return this.count();
+    }
+
 }
