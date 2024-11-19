@@ -1,16 +1,18 @@
 package net.ausiasmarch.contante.service;
 
 import java.util.Optional;
-
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.ausiasmarch.contante.entity.UsuarioEntity;
 import net.ausiasmarch.contante.exception.ResourceNotFoundException;
 import net.ausiasmarch.contante.repository.UsuarioRepository;
 
+@Transactional
 @Service
 public class UsuarioService implements ServiceInterface<UsuarioEntity> {
 
@@ -26,7 +28,6 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
     private String[] arrApellidos = {"Sancho", "Gomez", "Pérez", "Rodriguez", "Garcia", "Fernandez", "Lopez",
         "Martinez", "Sanchez", "Gonzalez", "Gimenez", "Feliu", "Gonzalez", "Hermoso", "Vidal", "Escriche"};
 
-
     public Long randomCreate(Long cantidad) {
         for (int i = 0; i < cantidad; i++) {
             UsuarioEntity oUsuarioEntity = new UsuarioEntity();
@@ -40,7 +41,6 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
     }
 
     public Page<UsuarioEntity> getPage(Pageable oPageable, Optional<String> filter) {
-
         if (filter.isPresent()) {
             return oUsuarioRepository
                     .findByNombreContainingOrApellido1ContainingOrApellido2ContainingOrEmailContaining(
@@ -54,13 +54,13 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
     public UsuarioEntity get(Long id) {
         return oUsuarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
-        // return oUsuarioRepository.findById(id).get();
     }
 
     public Long count() {
         return oUsuarioRepository.count();
     }
 
+    
     public Long delete(Long id) {
         oUsuarioRepository.deleteById(id);
         return 1L;
@@ -92,4 +92,15 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
         return this.count();
     }
 
+    public Long deleteEvenIds() {
+        // Buscar los IDs pares
+        List<Long> evenIds = oUsuarioRepository.findEvenIds();
+    
+        // Si hay IDs pares, eliminarlos
+        if (!evenIds.isEmpty()) {
+            oUsuarioRepository.deleteByIdIn(evenIds);
+            return (long) evenIds.size(); // Devolver la cantidad eliminada
+        }
+        return 0L; // Si no hay registros pares, devolver 0
+    }
 }

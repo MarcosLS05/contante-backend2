@@ -70,5 +70,10 @@ public class Usuario {
     public ResponseEntity<Long> deleteAll() {
         return new ResponseEntity<Long>(oUsuarioService.deleteAll(), HttpStatus.OK);
     }
+    @DeleteMapping("/delete-even")
+    public ResponseEntity<Long> deleteEvenIds() {
+        return new ResponseEntity<Long>(oUsuarioService.deleteEvenIds(), HttpStatus.OK);
+    }
+
 
 }
